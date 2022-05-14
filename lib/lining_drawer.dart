@@ -57,10 +57,11 @@ class _LiningDrawerState extends State<LiningDrawer>
     _firstShadowController = AnimationController(
       vsync: this,
       duration: widget.openDuration,
-      upperBound: widget.style.underOpenRatio,
+      upperBound: widget.style.bottomOpenRatio,
       reverseDuration: widget.closeDuration,
     )..addListener(() {
-        if (_firstShadowController.value >= (widget.style.underOpenRatio / 2) &&
+        if (_firstShadowController.value >=
+                (widget.style.bottomOpenRatio / 2) &&
             !_secondShadowController.isAnimating &&
             !isOpened) {
           _secondShadowController.forward();
@@ -134,7 +135,7 @@ class _LiningDrawerState extends State<LiningDrawer>
                             _kMap[widget.direction]!,
                         0),
                     child: Container(
-                      color: widget.style.underColor,
+                      color: widget.style.bottomColor,
                       height: MediaQuery.of(context).size.height,
                       width: double.infinity,
                     ),
@@ -228,8 +229,8 @@ class LiningDrawerController {
 }
 
 class LiningDrawerStyle {
-  /// under container color
-  final Color underColor;
+  /// bottom container color
+  final Color bottomColor;
 
   /// middle container color
   final Color middleColor;
@@ -237,8 +238,8 @@ class LiningDrawerStyle {
   /// main container color
   final Color mainColor;
 
-  /// under container open ratio
-  final double underOpenRatio;
+  /// bottom container open ratio
+  final double bottomOpenRatio;
 
   /// middle container open ratio
   final double middleOpenRatio;
@@ -247,10 +248,10 @@ class LiningDrawerStyle {
   final double mainOpenratio;
 
   const LiningDrawerStyle({
-    this.underColor = const Color(0xFF3a3b3c),
+    this.bottomColor = const Color(0xFF3a3b3c),
     this.middleColor = Colors.red,
     this.mainColor = Colors.white,
-    this.underOpenRatio = 1.0,
+    this.bottomOpenRatio = 1.0,
     this.middleOpenRatio = 0.90,
     this.mainOpenratio = 0.82,
   });

@@ -48,7 +48,7 @@ class _LiningDrawerState extends State<LiningDrawer>
   late final AnimationController _firstShadowController,
       _secondShadowController,
       mainDrawerController;
-  bool isOpened = false;
+  ValueNotifier<bool> isOpened = ValueNotifier(false);
 
   @override
   void initState() {
@@ -63,11 +63,11 @@ class _LiningDrawerState extends State<LiningDrawer>
         if (_firstShadowController.value >=
                 (widget.style.bottomOpenRatio / 2) &&
             !_secondShadowController.isAnimating &&
-            !isOpened) {
+            !isOpened.value) {
           _secondShadowController.forward();
         }
         if (_firstShadowController.isDismissed) {
-          isOpened = false;
+          isOpened.value = false;
         }
       });
 
@@ -80,7 +80,7 @@ class _LiningDrawerState extends State<LiningDrawer>
         if (_secondShadowController.value >=
                 (widget.style.middleOpenRatio / 2) &&
             !mainDrawerController.isAnimating &&
-            !isOpened) {
+            !isOpened.value) {
           mainDrawerController.forward();
         }
         if (_secondShadowController.isDismissed) {
@@ -95,7 +95,7 @@ class _LiningDrawerState extends State<LiningDrawer>
       upperBound: widget.style.mainOpenratio,
     )..addListener(() {
         if (mainDrawerController.isCompleted) {
-          isOpened = true;
+          isOpened.value = true;
         }
         if (mainDrawerController.isDismissed) {
           _secondShadowController.reverse();
@@ -150,21 +150,27 @@ class _LiningDrawerState extends State<LiningDrawer>
                                 (1 - _secondShadowController.value)) *
                             _kMap[widget.direction]!,
                         0),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: widget.style.middleColor,
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.3),
-                            offset: const Offset(2, 2),
-                            spreadRadius: 3.0,
-                            blurRadius: 6.0,
-                          ),
-                        ],
-                      ),
-                      height: MediaQuery.of(context).size.height,
-                      width: double.infinity,
-                    ),
+                    child: ValueListenableBuilder<bool>(
+                        valueListenable: isOpened,
+                        builder: (_, _isOpened, __) {
+                          return Container(
+                            decoration: BoxDecoration(
+                              color: widget.style.middleColor,
+                              boxShadow: !_isOpened
+                                  ? null
+                                  : [
+                                      BoxShadow(
+                                        color: Colors.black.withOpacity(0.3),
+                                        offset: const Offset(2, 2),
+                                        spreadRadius: 3.0,
+                                        blurRadius: 6.0,
+                                      ),
+                                    ],
+                            ),
+                            height: MediaQuery.of(context).size.height,
+                            width: double.infinity,
+                          );
+                        }),
                   );
                 }),
             AnimatedBuilder(
@@ -176,32 +182,38 @@ class _LiningDrawerState extends State<LiningDrawer>
                               (1 - mainDrawerController.value)) *
                           _kMap[widget.direction]!,
                       0),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: widget.style.mainColor,
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.3),
-                          offset: const Offset(2, 2),
-                          spreadRadius: 3.0,
-                          blurRadius: 6.0,
-                        ),
-                      ],
-                    ),
-                    height: MediaQuery.of(context).size.height,
-                    width: double.infinity,
-                    child: Padding(
-                      padding:
-                          widget.direction == DrawerDirection.fromLeftToRight
-                              ? EdgeInsets.only(
-                                  left: _kPadding,
-                                )
-                              : EdgeInsets.only(
-                                  right: _kPadding,
-                                ),
-                      child: widget.drawer,
-                    ),
-                  ),
+                  child: ValueListenableBuilder<bool>(
+                      valueListenable: isOpened,
+                      builder: (_, _isOpened, ___) {
+                        return Container(
+                          decoration: BoxDecoration(
+                            color: widget.style.mainColor,
+                            boxShadow: !_isOpened
+                                ? null
+                                : [
+                                    BoxShadow(
+                                      color: Colors.black.withOpacity(0.3),
+                                      offset: const Offset(2, 2),
+                                      spreadRadius: 3.0,
+                                      blurRadius: 6.0,
+                                    ),
+                                  ],
+                          ),
+                          height: MediaQuery.of(context).size.height,
+                          width: double.infinity,
+                          child: Padding(
+                            padding: widget.direction ==
+                                    DrawerDirection.fromLeftToRight
+                                ? EdgeInsets.only(
+                                    left: _kPadding,
+                                  )
+                                : EdgeInsets.only(
+                                    right: _kPadding,
+                                  ),
+                            child: widget.drawer,
+                          ),
+                        );
+                      }),
                 );
               },
             ),
@@ -216,7 +228,7 @@ class LiningDrawerController {
   _LiningDrawerState? _state;
 
   /// return the drawer opening state
-  bool get isDrawerOpen => _state!.isOpened;
+  bool get isDrawerOpen => _state!.isOpened.value;
 
   /// open the drawer
   void open() => _state!._firstShadowController.forward();
@@ -225,7 +237,7 @@ class LiningDrawerController {
   void close() => _state!.mainDrawerController.reverse();
 
   /// open/close the drawer auto
-  void toggleDrawer() => _state!.isOpened ? close() : open();
+  void toggleDrawer() => _state!.isOpened.value ? close() : open();
 }
 
 class LiningDrawerStyle {

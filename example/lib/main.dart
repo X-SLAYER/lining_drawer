@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:lining_drawer/lining_drawer.dart';
 
 void main() {
@@ -11,6 +12,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData(
         primarySwatch: Colors.blue,
@@ -37,33 +39,44 @@ class _HomePageState extends State<HomePage> {
       direction: isRTL
           ? DrawerDirection.fromRightToLeft
           : DrawerDirection.fromLeftToRight,
-      openDuration: const Duration(milliseconds: 250),
       controller: _controller,
       drawer: SafeArea(
         child: Column(
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Text(
-                  "NETFLIX",
-                  style: TextStyle(
-                    color: Colors.red,
+            Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text(
+                    "NETFLIX",
+                    style: TextStyle(
+                      color: Colors.red,
+                      fontSize: 35.0,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
-                ),
-                IconButton(
-                  onPressed: () {
-                    _controller.toggleDrawer();
-                  },
-                  icon: const Icon(Icons.close),
-                )
-              ],
+                  IconButton(
+                    onPressed: () {
+                      _controller.toggleDrawer();
+                    },
+                    icon: const Icon(
+                      Icons.close,
+                      color: Colors.black26,
+                    ),
+                  )
+                ],
+              ),
             ),
           ],
         ),
       ),
       child: Scaffold(
         appBar: AppBar(
+          systemOverlayStyle: const SystemUiOverlayStyle(
+            statusBarColor: Colors.transparent,
+            statusBarIconBrightness: Brightness.dark,
+          ),
           leading: IconButton(
             onPressed: () {
               _controller.toggleDrawer();

@@ -1,6 +1,12 @@
 # lining_drawer
 
-A customized drawer for your flutter.
+A customized drawer for your flutter apps.
+
+## Preview
+
+<img src='https://user-images.githubusercontent.com/22800380/170866664-80a20315-8614-40c3-b91a-c7d5bb78787f.gif' height='750' />
+
+
 
 ### Installation and usage ###
 

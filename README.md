@@ -1,39 +1,47 @@
-<!-- 
-This README describes the package. If you publish this package to pub.dev,
-this README's contents appear on the landing page for your package.
+# lining_drawer
 
-For information about how to write a good package README, see the guide for
-[writing package pages](https://dart.dev/guides/libraries/writing-package-pages). 
+A customized drawer for your flutter.
 
-For general information about developing packages, see the Dart guide for
-[creating packages](https://dart.dev/guides/libraries/create-library-packages)
-and the Flutter guide for
-[developing packages and plugins](https://flutter.dev/developing-packages). 
--->
+### Installation and usage ###
 
-TODO: Put a short description of the package here that helps potential users
-know whether this package might be useful for them.
+Add package to your pubspec:
 
-## Features
-
-TODO: List what your package can do. Maybe include images, gifs, or videos.
-
-## Getting started
-
-TODO: List prerequisites and provide or point to information on how to
-start using the package.
-
-## Usage
-
-TODO: Include short and useful examples for package users. Add longer examples
-to `/example` folder. 
-
-```dart
-const like = 'sample';
+```yaml
+dependencies:
+  lining_drawer: any # or the latest version on Pub
 ```
 
-## Additional information
+### USAGE
 
-TODO: Tell users more about the package: where to find more information, how to 
-contribute to the package, how to file issues, what response they can expect 
-from the package authors, and more.
+```dart 
+
+import 'package:lining_drawer/lining_drawer.dart';
+
+...
+
+final LiningDrawerController _controller = LiningDrawerController();
+
+...
+LiningDrawer(
+  direction: isRTL
+      ? DrawerDirection.fromRightToLeft
+      : DrawerDirection.fromLeftToRight,
+  openDuration: const Duration(milliseconds: 250),
+  controller: _controller,
+  drawer: yourDrawerWidget(),
+  child: Scaffold(),
+  // openDuration: const Duration(milliseconds: 250),
+  // closeDuration: const Duration(milliseconds: 250),
+  // style: const LiningDrawerStyle(
+  //   bottomColor: Color(0xFF3a3b3c),
+  //   middleColor: Colors.red,
+  //   mainColor: Colors.white,
+  //   bottomOpenRatio: 1.0,
+  //   middleOpenRatio: 0.90,
+  //   mainOpenratio: 0.82,
+  // ).....
+  
+);
+
+```
+
